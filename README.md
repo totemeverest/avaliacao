@@ -2,7 +2,7 @@
 
 Página pública (GitHub Pages) onde cada aluno da Academia Everest acompanha as próprias avaliações corporais.
 
-- Endereço: `https://totemeverest.github.io/avaliacao/#<código-do-aluno>`
+- Endereço: `https://everestacademias.com/avaliacao/#<código-do-aluno>` (GitHub Pages deste repositório, no domínio da academia)
 - O código (22 caracteres aleatórios) é criado pelo app do totem e enviado ao aluno pelo WhatsApp.
 - Fica depois do `#`: o navegador não manda essa parte para o servidor.
 - A página lê **um único documento** no Firestore (`portal/<código>`) com o primeiro nome e as avaliações daquele aluno.
