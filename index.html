@@ -180,7 +180,10 @@ details.ajuda li{margin:6px 0}
     tipo_corporal: 'Perfil do corpo pela relação entre gordura e músculo.'
   };
   // Rótulos DA PRÓPRIA AVALIAÇÃO que pedem atenção (nenhuma regra médica nossa).
-  var ATENCAO = ['alto', 'alta', 'baixo', 'baixa', 'insuficiente', 'sobrepeso', 'obeso', 'obesa', 'obesidade', 'abaixo do peso', 'magro', 'magra'];
+  var ATENCAO = ['alto', 'alta', 'baixo', 'baixa', 'insuficiente', 'sobrepeso', 'obeso', 'obesa', 'obesidade', 'abaixo do peso', 'magro', 'magra',
+    'muito alto', 'muito alta', 'muito baixo', 'muito baixa', 'acima do padrão', 'abaixo do padrão'];
+  // Mesmas listas do app: verde só para o que a avaliação diz que está bom; o resto, neutro.
+  var POSITIVO = ['excelente', 'bom', 'boa', 'otimo', 'ótimo', 'ideal', 'padrão', 'padrao', 'normal', 'legal'];
 
   var METRICAS = [
     { id: 'peso', k: 'peso_kg', nome: 'Peso', un: 'kg', min: 'faixa_peso_min', max: 'faixa_peso_max', exp: EXP.peso },
@@ -211,8 +214,10 @@ details.ajuda li{margin:6px 0}
   function fmtValor(v, un) { return un === 'kcal' ? fmtKcal(v) : fmt(v); }
   function classe(c) { return c ? c.trim().charAt(0).toUpperCase() + c.trim().slice(1) : null; }
   function pedeAtencao(c) { return !!c && ATENCAO.indexOf(c.trim().toLowerCase()) >= 0; }
-  function tom(c) { return !c ? 'neutro' : pedeAtencao(c) ? 'alerta' : 'ok'; }
-  function chip(c) { return c ? el('span', { class: 'chip ' + tom(c), text: (pedeAtencao(c) ? '⚠ ' : '✓ ') + classe(c) }) : null; }
+  function tom(c) { return !c ? 'neutro' : POSITIVO.indexOf(c.trim().toLowerCase()) >= 0 ? 'ok' : pedeAtencao(c) ? 'alerta' : 'neutro'; }
+  function chip(c) { if (!c) return null; var t = tom(c); return el('span', { class: 'chip ' + t, text: (t === 'alerta' ? '⚠ ' : t === 'ok' ? '✓ ' : '') + classe(c) }); }
+  // Limite com unidade, igual ao app ("53 kg", "10%", "1.551 kcal").
+  function fmtLimite(v, un) { return fmtValor(v, un) + (un === '%' ? '%' : un ? ' ' + un : ''); }
 
   // Firestore REST: valores tipados → JS.
   function lerValor(v) {
@@ -293,8 +298,8 @@ details.ajuda li{margin:6px 0}
     if (v > hi) hi = v + span * 0.25;
     var pos = function (x) { return ((x - lo) / (hi - lo)) * 100; };
     var marcas = el('div', { class: 'marcas' }, [
-      el('span', { style: 'left:' + pos(a) + '%', text: 'mín. ' + fmtValor(a, un) }),
-      el('span', { style: 'left:' + pos(b) + '%', text: 'máx. ' + fmtValor(b, un) })
+      el('span', { style: 'left:' + pos(a) + '%', text: 'mín. ' + fmtLimite(a, un) }),
+      el('span', { style: 'left:' + pos(b) + '%', text: 'máx. ' + fmtLimite(b, un) })
     ]);
     var onde = v < a ? '⬇ Abaixo da faixa de referência' : v > b ? '⬆ Acima da faixa de referência' : '● Dentro da faixa de referência';
     return el('div', { class: 'barra' }, [
