@@ -74,13 +74,17 @@ button{font:inherit;color:inherit;cursor:pointer}
 .m-valor{font-size:28px;font-weight:900;line-height:1.1;margin-top:2px}
 .m-valor small{font-size:16px;font-weight:800;color:var(--suave);margin-left:2px}
 .m-exp{margin:8px 0 0;font-size:14.5px;color:var(--suave)}
-.barra{margin:14px 0 4px}
-.trilho{position:relative;height:12px;border-radius:999px;background:#ECE8F6}
-.zona{position:absolute;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,#B9A6F5,#8E72EA)}
-.ponto{position:absolute;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#fff;border:5px solid var(--neutro);box-shadow:0 2px 6px rgba(27,17,64,.3)}
-.ponto.ok{border-color:var(--ok)} .ponto.alerta{border-color:var(--alerta)}
-.marcas{position:relative;height:30px;font-size:12px;color:var(--suave);font-weight:700}
-.marcas span{position:absolute;top:6px;transform:translateX(-50%);white-space:nowrap}
+/* Barra de referência: tudo posicionado pela escala linear exata (mesma conta do app) */
+.barra{margin:12px 0 4px}
+.regua{position:relative;height:72px}
+.regua .trilho{position:absolute;top:32px;left:0;right:0;height:12px;border-radius:999px;background:#ECE8F6}
+.regua .zona{position:absolute;top:32px;height:12px;border-radius:999px;background:#A58BF0}
+.regua .tick{position:absolute;top:44px;width:2px;height:7px;margin-left:-1px;border-radius:1px;background:var(--roxo-escuro)}
+.regua .rot{position:absolute;top:53px;font-size:12px;line-height:16px;color:var(--suave);font-weight:700;white-space:nowrap;visibility:hidden}
+.regua .agulha{position:absolute;top:24px;width:3px;height:25px;margin-left:-1.5px;border-radius:3px;background:var(--neutro)}
+.regua .pontinho{position:absolute;top:31px;width:14px;height:14px;margin-left:-7px;border-radius:50%;border:2.5px solid #fff;background:var(--neutro);box-sizing:border-box}
+.regua .bolha-valor{position:absolute;top:0;height:24px;line-height:24px;padding:0 9px;border-radius:999px;color:#fff;font-size:13px;font-weight:800;white-space:nowrap;background:var(--neutro);visibility:hidden}
+.regua .ok{background:var(--ok)} .regua .alerta{background:var(--alerta)}
 .posicao{font-size:13.5px;font-weight:700;color:var(--texto)}
 /* listas simples */
 .linha{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 0;border-top:1px solid var(--lavanda2)}
@@ -292,25 +296,47 @@ details.ajuda li{margin:6px 0}
   }
 
   // Barra da faixa de referência: zona roxa = mínimo a máximo do próprio aluno; bolinha = valor dele.
-  function barra(v, a, b, un, t) {
-    var span = b - a, lo = a - span * 0.6, hi = b + span * 0.6;
-    if (v < lo) lo = v - span * 0.25;
-    if (v > hi) hi = v + span * 0.25;
+  // Escala LINEAR exata (a mesma do app): a faixa mín.–máx. ocupa o terço do meio e cada lateral
+  // tem a largura da faixa; se o valor passar disso, a escala abre só o necessário. Nada é preso na borda.
+  function escala(v, a, b) {
+    var span = b - a, lo = a - span, hi = b + span, folga = span * 0.15;
+    if (v < lo + folga * 0.5) lo = v - folga;
+    if (v > hi - folga * 0.5) hi = v + folga;
     var pos = function (x) { return ((x - lo) / (hi - lo)) * 100; };
-    var marcas = el('div', { class: 'marcas' }, [
-      el('span', { style: 'left:' + pos(a) + '%', text: 'mín. ' + fmtLimite(a, un) }),
-      el('span', { style: 'left:' + pos(b) + '%', text: 'máx. ' + fmtLimite(b, un) })
-    ]);
+    return { a: pos(a), b: pos(b), v: pos(v) };
+  }
+
+  function barra(v, a, b, un, t) {
+    var g = escala(v, a, b);
     var onde = v < a ? '⬇ Abaixo da faixa de referência' : v > b ? '⬆ Acima da faixa de referência' : '● Dentro da faixa de referência';
     return el('div', { class: 'barra' }, [
-      el('div', { class: 'trilho' }, [
-        el('div', { class: 'zona', style: 'left:' + pos(a) + '%;width:' + (pos(b) - pos(a)) + '%' }),
-        el('div', { class: 'ponto ' + t, style: 'left:' + Math.max(2, Math.min(98, pos(v))) + '%' })
+      el('div', { class: 'regua' }, [
+        el('div', { class: 'trilho' }),
+        el('div', { class: 'zona', style: 'left:' + g.a + '%;width:' + (g.b - g.a) + '%' }),
+        el('div', { class: 'tick', 'data-limite': 'min', style: 'left:' + g.a + '%' }),
+        el('div', { class: 'tick', 'data-limite': 'max', style: 'left:' + g.b + '%' }),
+        el('span', { class: 'rot', 'data-x': g.a, text: 'mín. ' + fmtLimite(a, un) }),
+        el('span', { class: 'rot', 'data-x': g.b, text: 'máx. ' + fmtLimite(b, un) }),
+        el('div', { class: 'bolha-valor ' + t, 'data-x': g.v, text: fmtLimite(v, un) }),
+        el('div', { class: 'agulha ' + t, 'data-valor': v, 'data-min': a, 'data-max': b, style: 'left:' + g.v + '%' }),
+        el('div', { class: 'pontinho ' + t, style: 'left:' + g.v + '%' })
       ]),
-      marcas,
       el('div', { class: 'posicao', text: onde })
     ]);
   }
+
+  // Rótulos e o número do valor ficam centralizados no ponto exato, sem sair da barra
+  // (só o texto desliza perto da borda; agulha e marcas nunca saem do lugar).
+  function posicionarRotulos() {
+    var itens = app.querySelectorAll('.regua [data-x]');
+    for (var i = 0; i < itens.length; i++) {
+      var e = itens[i], W = e.parentNode.clientWidth, lw = e.offsetWidth;
+      var x = W * Number(e.getAttribute('data-x')) / 100;
+      e.style.left = Math.max(0, Math.min(W - lw, x - lw / 2)) + 'px';
+      e.style.visibility = 'visible';
+    }
+  }
+  window.addEventListener('resize', posicionarRotulos);
 
   function metrica(m, d) {
     var v = num(d[m.k]);
@@ -485,6 +511,9 @@ details.ajuda li{margin:6px 0}
       app.appendChild(ul);
     }
     app.appendChild(rodape());
+    posicionarRotulos();
+    // fontes/largura podem mudar logo depois do primeiro desenho
+    if (window.requestAnimationFrame) requestAnimationFrame(posicionarRotulos);
   }
 
   function abrir(i) {
