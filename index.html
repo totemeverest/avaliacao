@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Everest • Minhas avaliações</title>
+<meta name="description" content="Acompanhe as suas avaliações corporais da Academia Everest.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#4A3AA6">
+<meta property="og:title" content="Everest • Minhas avaliações">
+<meta property="og:description" content="Seu link pessoal para acompanhar as suas avaliações na Everest.">
+<meta property="og:image" content="https://totemeverest.github.io/avaliacao/og.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+:root{
+  --roxo:#4A3AA6; --roxo2:#6A54CF; --roxo-escuro:#1B1140; --roxo-medio:#6D43D6; --lavanda:#F4F1FB; --lavanda2:#E6E0F5;
+  --ouro:#F5B335; --ouro-claro:#FFD37A; --ouro-escuro:#B97F10;
+  --texto:#1B1140; --suave:#6B6485; --branco:#fff;
+  --ok:#1E9C6D; --ok-bg:#E3F6EE; --alerta:#B7791F; --alerta-bg:#FFF4DC; --neutro:#6D43D6; --neutro-bg:#EFEAFD;
+  --raio:22px; --sombra:0 10px 30px rgba(27,17,64,.18);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--texto);
+  background:#F1EDFB;line-height:1.45}
+.hero{background:linear-gradient(180deg,var(--roxo) 0%,var(--roxo2) 100%);border-radius:0 0 30px 30px;padding-bottom:6px;box-shadow:0 8px 24px rgba(27,17,64,.16)}
+.pagina{max-width:560px;margin:0 auto;padding:0 16px}
+#corpo{padding-top:16px;padding-bottom:40px}
+button{font:inherit;color:inherit;cursor:pointer}
+.topo{display:flex;align-items:center;gap:12px;padding:18px 2px 8px;color:#fff}
+.topo img{width:46px;height:46px}
+.marca{font-weight:900;letter-spacing:.14em;font-size:15px;line-height:1.1}
+.marca small{display:block;font-weight:600;letter-spacing:.02em;font-size:13px;color:#E6DFFB}
+.ola{color:#fff;padding:14px 2px 18px}
+.ola h1{margin:0;font-size:30px;line-height:1.15;font-weight:900}
+.ola p{margin:6px 0 0;color:#E6DFFB;font-size:16px}
+.cartao{background:#fff;border-radius:var(--raio);box-shadow:var(--sombra);padding:18px;margin:0 0 14px}
+.rotulo-secao{display:flex;align-items:center;gap:8px;margin:22px 4px 10px;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--suave)}
+.rotulo-secao.claro{color:#E6DFFB}
+.cab-aval{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;color:#fff;margin:4px 2px 12px}
+.cab-aval .data{font-size:17px;font-weight:800}
+.cab-aval .data small{display:block;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#E6DFFB}
+.selo{display:inline-flex;align-items:center;gap:6px;background:var(--ouro);color:#2A1A5E;font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+.selo.cinza{background:rgba(255,255,255,.18);color:#fff}
+/* abas */
+.abas{display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.16);border-radius:999px;padding:4px;margin:0 0 14px}
+.abas button{border:0;background:transparent;color:#fff;font-weight:800;font-size:15px;padding:11px 8px;border-radius:999px;min-height:44px}
+.abas button[aria-selected="true"]{background:#fff;color:var(--roxo)}
+/* pontuação */
+.placar{display:flex;align-items:center;gap:18px}
+.anel{position:relative;width:118px;height:118px;flex:0 0 auto}
+.anel svg{width:118px;height:118px;transform:rotate(-90deg)}
+.anel .num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.anel .num b{font-size:36px;line-height:1;font-weight:900}
+.anel .num span{font-size:12px;color:var(--suave);font-weight:700}
+.placar h2{margin:0 0 4px;font-size:19px}
+.placar p{margin:6px 0 0;color:var(--suave);font-size:14.5px}
+.perfil{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.perfil span{background:var(--lavanda);color:var(--roxo);font-weight:700;font-size:13.5px;padding:6px 11px;border-radius:999px}
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:800;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}
+.chip.alerta{background:var(--alerta-bg);color:var(--alerta)}
+.chip.neutro{background:var(--neutro-bg);color:var(--neutro)}
+/* métricas */
+.metrica{padding:16px 0;border-top:1px solid var(--lavanda2)}
+.metrica:first-child{border-top:0;padding-top:2px}
+.metrica:last-child{padding-bottom:2px}
+.m-topo{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.m-nome{font-size:15px;font-weight:800;color:var(--suave)}
+.m-valor{font-size:28px;font-weight:900;line-height:1.1;margin-top:2px}
+.m-valor small{font-size:16px;font-weight:800;color:var(--suave);margin-left:2px}
+.m-exp{margin:8px 0 0;font-size:14.5px;color:var(--suave)}
+.barra{margin:14px 0 4px}
+.trilho{position:relative;height:12px;border-radius:999px;background:#ECE8F6}
+.zona{position:absolute;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,#B9A6F5,#8E72EA)}
+.ponto{position:absolute;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#fff;border:5px solid var(--neutro);box-shadow:0 2px 6px rgba(27,17,64,.3)}
+.ponto.ok{border-color:var(--ok)} .ponto.alerta{border-color:var(--alerta)}
+.marcas{position:relative;height:30px;font-size:12px;color:var(--suave);font-weight:700}
+.marcas span{position:absolute;top:6px;transform:translateX(-50%);white-space:nowrap}
+.posicao{font-size:13.5px;font-weight:700;color:var(--texto)}
+/* listas simples */
+.linha{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 0;border-top:1px solid var(--lavanda2)}
+.linha:first-child{border-top:0;padding-top:0}
+.linha:last-child{padding-bottom:0}
+.linha .l-nome{font-weight:800}
+.linha .l-exp{display:block;font-size:13.5px;color:var(--suave);font-weight:400;margin-top:2px}
+.linha .l-valor{font-weight:900;font-size:17px;text-align:right;white-space:nowrap}
+.atencao{background:linear-gradient(180deg,#FFF8E8,#FFF);border:1px solid #F7DFA6}
+.atencao ul{margin:0;padding:0;list-style:none}
+.atencao li{padding:8px 0;border-top:1px dashed #F0D58F;font-size:15px}
+.atencao li:first-child{border-top:0;padding-top:0}
+.atencao li:last-child{padding-bottom:0}
+.atencao .nada{color:var(--ok);font-weight:700}
+/* whatsapp */
+.zap{background:#EFE7DE;border-radius:var(--raio);padding:16px 12px;box-shadow:var(--sombra);margin-bottom:14px;
+  background-image:radial-gradient(rgba(0,0,0,.035) 1px,transparent 1px);background-size:14px 14px}
+.zap-topo{display:flex;align-items:center;gap:10px;background:#075E54;color:#fff;margin:-16px -12px 14px;padding:10px 14px;border-radius:var(--raio) var(--raio) 0 0}
+.zap-topo img{width:34px;height:34px;border-radius:50%;background:var(--roxo);padding:3px}
+.zap-topo b{display:block;font-size:15px} .zap-topo span{font-size:12px;opacity:.85}
+.bolha{position:relative;background:#fff;border-radius:0 12px 12px 12px;padding:10px 12px 22px;max-width:94%;box-shadow:0 1px 1px rgba(0,0,0,.12);
+  font-size:15px;line-height:1.42;white-space:pre-wrap;word-wrap:break-word;overflow-wrap:anywhere}
+.bolha:before{content:"";position:absolute;left:-8px;top:0;border-width:0 10px 10px 0;border-style:solid;border-color:transparent #fff transparent transparent}
+.bolha .hora{position:absolute;right:10px;bottom:5px;font-size:11px;color:#8696a0}
+.zap-nota{font-size:13px;color:#54656F;text-align:center;margin:12px 6px 0}
+/* histórico */
+.lista button{display:flex;width:100%;align-items:center;gap:12px;text-align:left;background:#fff;border:0;border-radius:18px;padding:14px 16px;margin:0 0 10px;box-shadow:0 4px 14px rgba(27,17,64,.08);min-height:64px}
+.lista button:active{transform:scale(.99)}
+.lista .ic{width:42px;height:42px;border-radius:12px;background:var(--lavanda);display:flex;align-items:center;justify-content:center;font-size:20px;flex:0 0 auto}
+.lista .t{flex:1;min-width:0}
+.lista .t b{display:block;font-size:16px}
+.lista .t span{font-size:13.5px;color:var(--suave)}
+.lista .seta{color:var(--roxo);font-size:22px;font-weight:900}
+.lista button.atual{outline:3px solid var(--ouro)}
+.voltar{display:inline-flex;align-items:center;gap:6px;border:0;background:rgba(255,255,255,.18);color:#fff;font-weight:800;padding:10px 16px;border-radius:999px;margin:4px 0 14px;min-height:44px}
+details.ajuda{background:#fff;border-radius:var(--raio);box-shadow:0 4px 14px rgba(27,17,64,.08);padding:4px 18px;margin:0 0 14px}
+details.ajuda summary{list-style:none;cursor:pointer;font-weight:800;padding:14px 0;display:flex;justify-content:space-between;align-items:center}
+details.ajuda summary::-webkit-details-marker{display:none}
+details.ajuda summary:after{content:"+";font-size:22px;color:var(--roxo)}
+details.ajuda[open] summary:after{content:"–"}
+details.ajuda ul{margin:0 0 16px;padding-left:18px;color:var(--suave);font-size:14.5px}
+details.ajuda li{margin:6px 0}
+.rodape{text-align:center;color:var(--suave);font-size:13px;margin:26px 8px 0}
+.rodape b{color:var(--texto)}
+/* estados */
+.estado{background:#fff;border-radius:var(--raio);box-shadow:var(--sombra);padding:28px 22px;text-align:center;margin-top:10px}
+.estado .emoji{font-size:44px}
+.estado h2{margin:8px 0 6px;font-size:21px}
+.estado p{margin:0 0 6px;color:var(--suave)}
+.btn{display:inline-block;border:0;background:var(--roxo);color:#fff;font-weight:800;padding:13px 22px;border-radius:999px;margin-top:12px;min-height:48px}
+.esqueleto{height:16px;border-radius:8px;background:linear-gradient(90deg,#EEE9FA,#F8F6FD,#EEE9FA);background-size:200% 100%;animation:brilho 1.2s infinite;margin:10px 0}
+@keyframes brilho{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.esqueleto{animation:none}}
+[hidden]{display:none!important}
+@media (max-width:360px){.anel,.anel svg{width:96px;height:96px}.anel .num b{font-size:30px}.placar{gap:14px}.ola h1{font-size:27px}}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="pagina">
+    <header class="topo">
+      <img src="logo.png" alt="Everest" width="46" height="46">
+      <div class="marca">EVEREST<small>Minhas avaliações</small></div>
+    </header>
+    <div id="hero" aria-live="polite"><div class="ola"><h1>Carregando…</h1><p>Buscando as suas avaliações.</p></div></div>
+  </div>
+</div>
+<main class="pagina" id="corpo">
+  <div class="cartao"><div class="esqueleto" style="width:60%"></div><div class="esqueleto"></div><div class="esqueleto" style="width:80%"></div></div>
+  <noscript><div class="estado"><h2>Ative o JavaScript</h2><p>Esta página precisa dele para mostrar as suas avaliações.</p></div></noscript>
+</main>
+<script>
+(function () {
+  'use strict';
+  var PROJETO = 'app-everest-54ace';
+  var CODIGO_VALIDO = /^[A-Za-z0-9]{22}$/;
+  var hero = document.getElementById('hero');
+  var app = document.getElementById('corpo');
+
+  /* ---------- textos fixos (os mesmos do relatório do WhatsApp) ---------- */
+  var EXP = {
+    pontuacao: 'Nota geral que resume o conjunto da sua avaliação.',
+    peso: 'Seu peso no dia da avaliação.',
+    imc: 'O IMC relaciona o seu peso com a sua altura.',
+    tmb: 'Energia que o seu corpo gasta em repouso, só para se manter funcionando.',
+    ingestao: 'Quantidade de calorias por dia indicada para o seu perfil.',
+    massa_muscular: 'Quantidade de músculo do seu corpo.',
+    gordura_corporal: 'Parte do seu peso que é gordura.',
+    gordura_visceral: 'Gordura que fica entre os órgãos, na região do abdômen.',
+    agua_corporal: 'Quantidade de água no seu corpo.',
+    peso_padrao: 'Peso de referência para a sua altura.',
+    peso_ideal: 'Peso que a avaliação aponta como ideal para você.',
+    controle_peso: 'Quanto ajustar no peso para chegar ao padrão (negativo = reduzir).',
+    controle_gordura: 'Quanto ajustar na gordura (negativo = reduzir).',
+    nivel_obesidade: 'Classificação do seu peso feita pela avaliação.',
+    idade_corporal: 'Idade que o seu corpo aparenta pelos resultados.',
+    tipo_corporal: 'Perfil do corpo pela relação entre gordura e músculo.'
+  };
+  // Rótulos DA PRÓPRIA AVALIAÇÃO que pedem atenção (nenhuma regra médica nossa).
+  var ATENCAO = ['alto', 'alta', 'baixo', 'baixa', 'insuficiente', 'sobrepeso', 'obeso', 'obesa', 'obesidade', 'abaixo do peso', 'magro', 'magra'];
+
+  var METRICAS = [
+    { id: 'peso', k: 'peso_kg', nome: 'Peso', un: 'kg', min: 'faixa_peso_min', max: 'faixa_peso_max', exp: EXP.peso },
+    { id: 'imc', k: 'imc', nome: 'IMC', un: '', classe: 'imc_classificacao', min: 'faixa_imc_min', max: 'faixa_imc_max', exp: EXP.imc },
+    { id: 'gordura', k: 'gordura_corporal_percentual', nome: 'Relação de gordura', un: '%', classe: 'gordura_corporal_classificacao', min: 'faixa_gordura_min', max: 'faixa_gordura_max', exp: EXP.gordura_corporal },
+    { id: 'visceral', k: 'gordura_visceral', nome: 'Gordura visceral', un: '', classe: 'gordura_visceral_classificacao', min: 'faixa_visceral_min', max: 'faixa_visceral_max', exp: EXP.gordura_visceral },
+    { id: 'musculo', k: 'massa_muscular_kg', nome: 'Massa muscular', un: 'kg', classe: 'massa_muscular_classificacao', min: 'faixa_massa_muscular_min', max: 'faixa_massa_muscular_max', exp: EXP.massa_muscular },
+    { id: 'agua', k: 'agua_corporal_total_kg', nome: 'Água corporal', un: 'kg', classe: 'agua_corporal_classificacao', min: 'faixa_agua_min', max: 'faixa_agua_max', exp: EXP.agua_corporal }
+  ];
+  var METABOLISMO = { k: 'tmb_kcal', nome: 'Taxa metabólica basal (TMB)', un: 'kcal', classe: 'tmb_classificacao', min: 'faixa_tmb_min', max: 'faixa_tmb_max', exp: EXP.tmb };
+
+  /* ---------- utilidades ---------- */
+  function el(tag, attrs, filhos) {
+    var e = document.createElement(tag);
+    if (attrs) for (var a in attrs) {
+      if (a === 'class') e.className = attrs[a];
+      else if (a === 'text') e.textContent = attrs[a];
+      else if (a.slice(0, 2) === 'on') e.addEventListener(a.slice(2), attrs[a]);
+      else e.setAttribute(a, attrs[a]);
+    }
+    (filhos || []).forEach(function (f) { if (f !== null && f !== undefined && f !== false) e.appendChild(typeof f === 'string' ? document.createTextNode(f) : f); });
+    return e;
+  }
+  function num(v) { return typeof v === 'number' && isFinite(v) ? v : null; }
+  // Valor exatamente como foi lido: só troca ponto por vírgula (nada arredondado).
+  function fmt(v) { return String(v).replace('.', ','); }
+  function fmtKcal(v) { return String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  function fmtValor(v, un) { return un === 'kcal' ? fmtKcal(v) : fmt(v); }
+  function classe(c) { return c ? c.trim().charAt(0).toUpperCase() + c.trim().slice(1) : null; }
+  function pedeAtencao(c) { return !!c && ATENCAO.indexOf(c.trim().toLowerCase()) >= 0; }
+  function tom(c) { return !c ? 'neutro' : pedeAtencao(c) ? 'alerta' : 'ok'; }
+  function chip(c) { return c ? el('span', { class: 'chip ' + tom(c), text: (pedeAtencao(c) ? '⚠ ' : '✓ ') + classe(c) }) : null; }
+
+  // Firestore REST: valores tipados → JS.
+  function lerValor(v) {
+    if (!v) return null;
+    if ('stringValue' in v) return v.stringValue;
+    if ('integerValue' in v) return Number(v.integerValue);
+    if ('doubleValue' in v) return Number(v.doubleValue);
+    if ('booleanValue' in v) return v.booleanValue;
+    if ('timestampValue' in v) return v.timestampValue;
+    if ('nullValue' in v) return null;
+    if ('mapValue' in v) return lerCampos((v.mapValue && v.mapValue.fields) || {});
+    if ('arrayValue' in v) return ((v.arrayValue && v.arrayValue.values) || []).map(lerValor);
+    return null;
+  }
+  function lerCampos(f) { var o = {}; for (var k in f) o[k] = lerValor(f[k]); return o; }
+
+  function dataDe(av) {
+    var d = av.dados || {};
+    if (d.data_avaliacao) return { dia: d.data_avaliacao.trim(), hora: d.hora_avaliacao ? d.hora_avaliacao.trim().slice(0, 5) : '' };
+    var t = new Date(av.data);
+    if (isNaN(t)) return { dia: '', hora: '' };
+    return {
+      dia: t.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+      hora: t.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+    };
+  }
+  function textoData(av) { var d = dataDe(av); return d.dia + (d.hora ? ' • ' + d.hora : ''); }
+
+  /* ---------- telas de estado ---------- */
+  function estado(emoji, titulo, linhas, botao) {
+    hero.textContent = '';
+    app.textContent = '';
+    hero.appendChild(el('div', { class: 'ola' }, [el('h1', { text: 'Olá! 👋' }), el('p', { text: 'Este é o espaço de avaliações da Everest.' })]));
+    var c = el('div', { class: 'estado' }, [el('div', { class: 'emoji', text: emoji }), el('h2', { text: titulo })]);
+    linhas.forEach(function (l) { c.appendChild(el('p', { text: l })); });
+    if (botao) c.appendChild(el('button', { class: 'btn', text: botao.texto, onclick: botao.acao }));
+    app.appendChild(c);
+    app.appendChild(rodape());
+  }
+
+  function rodape() {
+    return el('footer', { class: 'rodape' }, [
+      el('p', {}, ['🔒 ', el('b', { text: 'Link pessoal.' }), ' Só quem tem este link vê esta página. Não compartilhe.']),
+      el('p', { text: 'Página só para consulta: nada aqui pode ser alterado.' }),
+      el('p', { text: 'Este resumo não substitui avaliação médica. Dúvidas? Fale com seu professor na Everest.' })
+    ]);
+  }
+
+  /* ---------- peças da avaliação ---------- */
+  function cartaoPontuacao(d) {
+    var p = num(d.pontuacao_fisica);
+    var perfil = el('div', { class: 'perfil' });
+    if (num(d.idade) !== null) perfil.appendChild(el('span', { text: fmt(d.idade) + ' anos' }));
+    if (num(d.altura_cm) !== null) perfil.appendChild(el('span', { text: fmt(d.altura_cm) + ' cm' }));
+    if (num(d.idade_corporal) !== null) perfil.appendChild(el('span', { text: 'Idade do corpo: ' + fmt(d.idade_corporal) + ' anos' }));
+    if (p === null) return perfil.childNodes.length ? el('div', { class: 'cartao' }, [perfil]) : null;
+    var r = 50, volta = 2 * Math.PI * r, parte = Math.max(0, Math.min(100, p)) / 100;
+    var cor = tom(d.pontuacao_classificacao) === 'alerta' ? '#E0A322' : '#F5B335';
+    var svg = '<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="50" fill="none" stroke="#EFEAFD" stroke-width="12"/>' +
+      '<circle cx="60" cy="60" r="50" fill="none" stroke="' + cor + '" stroke-width="12" stroke-linecap="round" stroke-dasharray="' + (volta * parte).toFixed(1) + ' ' + volta.toFixed(1) + '"/></svg>';
+    var anel = el('div', { class: 'anel', role: 'img', 'aria-label': 'Pontuação física ' + fmt(p) + ' de 100' });
+    anel.innerHTML = svg; // SVG fixo, só números
+    anel.appendChild(el('div', { class: 'num' }, [el('b', { text: fmt(p) }), el('span', { text: 'de 100' })]));
+    return el('div', { class: 'cartao' }, [
+      el('div', { class: 'placar' }, [anel, el('div', {}, [
+        el('h2', { text: 'Pontuação física' }),
+        chip(d.pontuacao_classificacao),
+        el('p', { text: EXP.pontuacao })
+      ])]),
+      perfil.childNodes.length ? perfil : null
+    ]);
+  }
+
+  // Barra da faixa de referência: zona roxa = mínimo a máximo do próprio aluno; bolinha = valor dele.
+  function barra(v, a, b, un, t) {
+    var span = b - a, lo = a - span * 0.6, hi = b + span * 0.6;
+    if (v < lo) lo = v - span * 0.25;
+    if (v > hi) hi = v + span * 0.25;
+    var pos = function (x) { return ((x - lo) / (hi - lo)) * 100; };
+    var marcas = el('div', { class: 'marcas' }, [
+      el('span', { style: 'left:' + pos(a) + '%', text: 'mín. ' + fmtValor(a, un) }),
+      el('span', { style: 'left:' + pos(b) + '%', text: 'máx. ' + fmtValor(b, un) })
+    ]);
+    var onde = v < a ? '⬇ Abaixo da faixa de referência' : v > b ? '⬆ Acima da faixa de referência' : '● Dentro da faixa de referência';
+    return el('div', { class: 'barra' }, [
+      el('div', { class: 'trilho' }, [
+        el('div', { class: 'zona', style: 'left:' + pos(a) + '%;width:' + (pos(b) - pos(a)) + '%' }),
+        el('div', { class: 'ponto ' + t, style: 'left:' + Math.max(2, Math.min(98, pos(v))) + '%' })
+      ]),
+      marcas,
+      el('div', { class: 'posicao', text: onde })
+    ]);
+  }
+
+  function metrica(m, d) {
+    var v = num(d[m.k]);
+    if (v === null) return null;
+    var c = m.classe ? d[m.classe] : null;
+    var a = num(d[m.min]), b = num(d[m.max]);
+    var valor = el('div', { class: 'm-valor' }, [fmtValor(v, m.un), m.un ? el('small', { text: m.un === '%' ? '%' : ' ' + m.un }) : null]);
+    return el('div', { class: 'metrica' }, [
+      el('div', { class: 'm-topo' }, [el('div', {}, [el('div', { class: 'm-nome', text: m.nome }), valor]), chip(c)]),
+      a !== null && b !== null && a < b ? barra(v, a, b, m.un, tom(c)) : null,
+      el('p', { class: 'm-exp', text: m.exp })
+    ]);
+  }
+
+  function cartaoCorpo(d) {
+    var itens = METRICAS.map(function (m) { return metrica(m, d); }).filter(Boolean);
+    return itens.length ? el('div', { class: 'cartao' }, itens) : null;
+  }
+
+  function cartaoMetabolismo(d) {
+    var itens = [];
+    var tmb = metrica(METABOLISMO, d);
+    if (tmb) itens.push(tmb);
+    if (num(d.ingestao_calorica_recomendada_kcal) !== null) {
+      itens.push(el('div', { class: 'metrica' }, [
+        el('div', { class: 'm-nome', text: 'Ingestão calórica recomendada' }),
+        el('div', { class: 'm-valor' }, [fmtKcal(d.ingestao_calorica_recomendada_kcal), el('small', { text: ' kcal/dia' })]),
+        el('p', { class: 'm-exp', text: EXP.ingestao })
+      ]));
+    }
+    return itens.length ? el('div', { class: 'cartao' }, itens) : null;
+  }
+
+  function cartaoRecomendacoes(d) {
+    var linhas = [
+      ['Peso padrão', num(d.peso_padrao_kg) !== null ? fmt(d.peso_padrao_kg) + ' kg' : null, EXP.peso_padrao],
+      ['Peso ideal', num(d.peso_ideal_kg) !== null ? fmt(d.peso_ideal_kg) + ' kg' : null, EXP.peso_ideal],
+      ['Controle de peso', num(d.controle_peso_kg) !== null ? fmt(d.controle_peso_kg) + ' kg' : null, EXP.controle_peso],
+      ['Controle de gordura', num(d.controle_gordura_kg) !== null ? fmt(d.controle_gordura_kg) + ' kg' : null, EXP.controle_gordura],
+      ['Nível de obesidade', classe(d.nivel_obesidade), EXP.nivel_obesidade],
+      ['Idade do corpo', num(d.idade_corporal) !== null ? fmt(d.idade_corporal) + ' anos' : null, EXP.idade_corporal],
+      ['Tipo corporal', classe(d.tipo_corporal), EXP.tipo_corporal]
+    ].filter(function (l) { return l[1] !== null; });
+    if (!linhas.length) return null;
+    return el('div', { class: 'cartao' }, linhas.map(function (l) {
+      return el('div', { class: 'linha' }, [
+        el('div', {}, [el('span', { class: 'l-nome', text: l[0] }), el('span', { class: 'l-exp', text: l[2] })]),
+        el('div', { class: 'l-valor', text: l[1] })
+      ]);
+    }));
+  }
+
+  function cartaoAtencao(d) {
+    var itens = [];
+    var checar = function (nome, c, k, kmin, kmax, un) {
+      if (!pedeAtencao(c)) return;
+      var t = nome + ': ' + classe(c);
+      var x = num(d[k]), a = num(d[kmin]), b = num(d[kmax]);
+      if (x !== null && a !== null && b !== null && a < b) {
+        var u = un === 'kcal' ? ' kcal' : un === '%' ? '%' : un ? ' ' + un : '';
+        if (x > b) t += ' (' + fmtValor(x, un) + u + ', acima do máximo ' + fmtValor(b, un) + u + ')';
+        else if (x < a) t += ' (' + fmtValor(x, un) + u + ', abaixo do mínimo ' + fmtValor(a, un) + u + ')';
+      }
+      itens.push(el('li', { text: '⚠️ ' + t }));
+    };
+    checar('Gordura visceral', d.gordura_visceral_classificacao, 'gordura_visceral', 'faixa_visceral_min', 'faixa_visceral_max', '');
+    checar('IMC', d.imc_classificacao, 'imc', 'faixa_imc_min', 'faixa_imc_max', '');
+    checar('Relação de gordura', d.gordura_corporal_classificacao, 'gordura_corporal_percentual', 'faixa_gordura_min', 'faixa_gordura_max', '%');
+    checar('Massa muscular', d.massa_muscular_classificacao, 'massa_muscular_kg', 'faixa_massa_muscular_min', 'faixa_massa_muscular_max', 'kg');
+    checar('Taxa metabólica basal', d.tmb_classificacao, 'tmb_kcal', 'faixa_tmb_min', 'faixa_tmb_max', 'kcal');
+    checar('Água corporal', d.agua_corporal_classificacao, 'agua_corporal_total_kg', 'faixa_agua_min', 'faixa_agua_max', 'kg');
+    return el('div', { class: 'cartao atencao' }, [
+      itens.length ? el('ul', {}, itens) : el('p', { class: 'nada', text: '✓ Nenhum indicador fora do padrão nesta avaliação.' }),
+      el('p', { class: 'm-exp', text: 'Só aparece aqui o que a própria avaliação classificou fora do padrão. Converse com seu professor sobre os próximos passos.' })
+    ]);
+  }
+
+  // Texto do WhatsApp com a mesma formatação (*negrito* e _itálico_), sempre escapado.
+  function bolhaWhatsApp(av) {
+    var esc = function (s) { return s.replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+    var html = esc(av.relatorio || '')
+      .replace(/\*([^*\n]+)\*/g, '<b>$1</b>')
+      .replace(/(^|[\s(])_([^_\n]+)_(?=$|[\s).,!?:;])/gm, '$1<i>$2</i>');
+    var b = el('div', { class: 'bolha' });
+    b.innerHTML = html;
+    b.appendChild(el('span', { class: 'hora', text: dataDe(av).hora || '' }));
+    return el('div', { class: 'zap' }, [
+      el('div', { class: 'zap-topo' }, [el('img', { src: 'logo.png', alt: '' }), el('div', {}, [el('b', { text: 'Everest' }), el('span', { text: 'mensagem da sua avaliação' })])]),
+      b,
+      el('p', { class: 'zap-nota', text: 'É a mesma mensagem que você recebeu no WhatsApp. Na aba “Fácil de ler” estão os mesmos dados, em cartões explicados.' })
+    ]);
+  }
+
+  function ajuda() {
+    return el('details', { class: 'ajuda' }, [
+      el('summary', { text: 'Como ler esta página' }),
+      el('ul', {}, [
+        el('li', { text: 'Os números são lidos da sua avaliação exatamente como aparecem nela: nada é arredondado nem inventado.' }),
+        el('li', {}, [el('span', { class: 'chip ok', text: '✓ Padrão' }), ' é a classificação que a própria avaliação deu. ', el('span', { class: 'chip alerta', text: '⚠ Alto' }), ' indica um ponto de atenção.']),
+        el('li', { text: 'Na barra, a faixa roxa vai do mínimo ao máximo de referência indicados para você pela avaliação. A bolinha é o seu valor.' }),
+        el('li', { text: 'Cada avaliação mostra só o resultado daquele dia. A comparação entre avaliações é feita com seu professor, na academia.' })
+      ])
+    ]);
+  }
+
+  function secao(texto, claro) { return el('div', { class: 'rotulo-secao' + (claro ? ' claro' : ''), text: texto }); }
+
+  /* ---------- página ---------- */
+  var ficha = null, aba = 'facil', aberta = 0;
+
+  function desenhar() {
+    var lista = ficha.avaliacoes;
+    var av = lista[aberta];
+    var d = av.dados || {};
+    var temDados = Object.keys(d).length > 0;
+    if (!temDados) aba = 'zap';
+    hero.textContent = '';
+    app.textContent = '';
+
+    if (aberta === 0) {
+      hero.appendChild(el('div', { class: 'ola' }, [
+        el('h1', { text: 'Olá, ' + ficha.nome + '! 👋' }),
+        el('p', { text: lista.length === 1 ? 'Aqui está a sua avaliação na Everest.' : 'Aqui estão as suas ' + lista.length + ' avaliações na Everest.' })
+      ]));
+    } else {
+      hero.appendChild(el('button', { class: 'voltar', text: '← Voltar para a mais recente', onclick: function () { history.back(); } }));
+    }
+
+    hero.appendChild(el('div', { class: 'cab-aval' }, [
+      el('div', { class: 'data' }, [el('small', { text: 'Avaliação de' }), textoData(av)]),
+      el('span', { class: aberta === 0 ? 'selo' : 'selo cinza', text: aberta === 0 ? '★ Mais recente' : 'Avaliação anterior' })
+    ]));
+
+    if (temDados) {
+      var abas = el('div', { class: 'abas', role: 'tablist' }, [
+        el('button', { role: 'tab', 'aria-selected': String(aba === 'facil'), text: '✨ Fácil de ler', onclick: function () { aba = 'facil'; desenhar(); } }),
+        el('button', { role: 'tab', 'aria-selected': String(aba === 'zap'), text: '💬 WhatsApp', onclick: function () { aba = 'zap'; desenhar(); } })
+      ]);
+      hero.appendChild(abas);
+    }
+
+    if (aba === 'zap') {
+      app.appendChild(bolhaWhatsApp(av));
+    } else {
+      [cartaoPontuacao(d)].forEach(function (c) { if (c) app.appendChild(c); });
+      var corpo = cartaoCorpo(d);
+      if (corpo) { app.appendChild(secao('📊 Seu corpo')); app.appendChild(corpo); }
+      var meta = cartaoMetabolismo(d);
+      if (meta) { app.appendChild(secao('⚡ Metabolismo')); app.appendChild(meta); }
+      var rec = cartaoRecomendacoes(d);
+      if (rec) { app.appendChild(secao('🎯 Recomendações da avaliação')); app.appendChild(rec); }
+      app.appendChild(secao('⚠️ Ponto de atenção'));
+      app.appendChild(cartaoAtencao(d));
+      app.appendChild(ajuda());
+    }
+
+    if (lista.length > 1) {
+      app.appendChild(secao(aberta === 0 ? '🗂️ Avaliações anteriores' : '🗂️ Todas as avaliações'));
+      var ul = el('div', { class: 'lista' });
+      lista.forEach(function (x, i) {
+        if (aberta === 0 && i === 0) return;
+        var dd = x.dados || {};
+        var resumo = [];
+        if (num(dd.pontuacao_fisica) !== null) resumo.push('Pontuação ' + fmt(dd.pontuacao_fisica));
+        if (num(dd.peso_kg) !== null) resumo.push('Peso ' + fmt(dd.peso_kg) + ' kg');
+        ul.appendChild(el('button', { class: i === aberta ? 'atual' : '', 'aria-label': 'Abrir avaliação de ' + textoData(x), onclick: function () { abrir(i); } }, [
+          el('div', { class: 'ic', text: i === 0 ? '★' : '📋' }),
+          el('div', { class: 't' }, [el('b', { text: textoData(x) }), el('span', { text: (i === 0 ? ['Mais recente'] : []).concat(resumo).join(' • ') || 'Toque para ver' })]),
+          el('div', { class: 'seta', text: '›' })
+        ]));
+      });
+      app.appendChild(ul);
+    }
+    app.appendChild(rodape());
+  }
+
+  function abrir(i) {
+    if (i === aberta) { window.scrollTo(0, 0); return; }
+    if (i === 0) { history.back(); return; }
+    if (aberta === 0) history.pushState({ aval: i }, '', location.href);
+    else history.replaceState({ aval: i }, '', location.href);
+    aberta = i; aba = 'facil'; desenhar(); window.scrollTo(0, 0);
+  }
+  window.addEventListener('popstate', function (e) {
+    if (!ficha) return;
+    var i = e.state && typeof e.state.aval === 'number' ? e.state.aval : 0;
+    aberta = Math.min(i, ficha.avaliacoes.length - 1); aba = 'facil'; desenhar(); window.scrollTo(0, 0);
+  });
+
+  function carregar() {
+    var codigo = (location.hash || '').replace(/^#/, '').trim();
+    if (!CODIGO_VALIDO.test(codigo)) {
+      estado('🔗', 'Link incompleto', ['Abra o link exatamente como você recebeu no WhatsApp da Everest.', 'Se não encontrar, peça o seu link na recepção.']);
+      return;
+    }
+    var url = 'https://firestore.googleapis.com/v1/projects/' + PROJETO + '/databases/(default)/documents/portal/' + codigo;
+    var ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 15000);
+    fetch(url, { cache: 'no-store', referrerPolicy: 'no-referrer', signal: ctrl ? ctrl.signal : undefined })
+      .then(function (r) {
+        clearTimeout(timer);
+        if (r.status === 404 || r.status === 403) return null;
+        if (!r.ok) throw new Error('http ' + r.status);
+        return r.json();
+      })
+      .then(function (doc) {
+        if (!doc) {
+          estado('⏳', 'Ainda não encontramos suas avaliações', [
+            'Se você acabou de fazer a avaliação, aguarde alguns minutos e toque em “Tentar de novo”.',
+            'Se recebeu um link mais novo da Everest, use sempre o mais recente.'
+          ], { texto: 'Tentar de novo', acao: carregar });
+          return;
+        }
+        var f = lerCampos(doc.fields || {});
+        var lista = (Array.isArray(f.avaliacoes) ? f.avaliacoes : []).filter(function (a) { return a && typeof a === 'object'; });
+        lista.sort(function (x, y) { return (Date.parse(y.data) || 0) - (Date.parse(x.data) || 0); });
+        if (!lista.length) {
+          estado('📋', 'Nenhuma avaliação por aqui ainda', ['Assim que você fizer uma avaliação na Everest, ela aparece nesta página.'], { texto: 'Atualizar', acao: carregar });
+          return;
+        }
+        ficha = { nome: (typeof f.nome === 'string' && f.nome.trim()) || 'Aluno', avaliacoes: lista };
+        var st = history.state && typeof history.state.aval === 'number' ? history.state.aval : 0;
+        aberta = Math.min(st, lista.length - 1);
+        document.title = 'Everest • Avaliações de ' + ficha.nome;
+        desenhar();
+      })
+      .catch(function () {
+        clearTimeout(timer);
+        estado('📶', 'Sem conexão', ['Não foi possível carregar agora. Confira a internet e tente de novo.'], { texto: 'Tentar de novo', acao: carregar });
+      });
+  }
+
+  window.addEventListener('hashchange', function () { ficha = null; aberta = 0; carregar(); });
+  carregar();
+})();
+</script>
+</body>
+</html>
