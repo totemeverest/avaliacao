@@ -216,10 +216,12 @@ details.ajuda li{margin:6px 0}
   function fmt(v) { return String(v).replace('.', ','); }
   function fmtKcal(v) { return String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
   function fmtValor(v, un) { return un === 'kcal' ? fmtKcal(v) : fmt(v); }
-  function classe(c) { return c ? c.trim().charAt(0).toUpperCase() + c.trim().slice(1) : null; }
-  function pedeAtencao(c) { return !!c && ATENCAO.indexOf(c.trim().toLowerCase()) >= 0; }
-  function tom(c) { return !c ? 'neutro' : POSITIVO.indexOf(c.trim().toLowerCase()) >= 0 ? 'ok' : pedeAtencao(c) ? 'alerta' : 'neutro'; }
-  function chip(c) { if (!c) return null; var t = tom(c); return el('span', { class: 'chip ' + t, text: (t === 'alerta' ? '⚠ ' : t === 'ok' ? '✓ ' : '') + classe(c) }); }
+  // Texto vindo da ficha: só string não vazia conta (qualquer outro tipo = ausente).
+  function txt(c) { return typeof c === 'string' && c.trim() ? c.trim() : null; }
+  function classe(c) { c = txt(c); return c ? c.charAt(0).toUpperCase() + c.slice(1) : null; }
+  function pedeAtencao(c) { c = txt(c); return !!c && ATENCAO.indexOf(c.toLowerCase()) >= 0; }
+  function tom(c) { c = txt(c); return !c ? 'neutro' : POSITIVO.indexOf(c.toLowerCase()) >= 0 ? 'ok' : pedeAtencao(c) ? 'alerta' : 'neutro'; }
+  function chip(c) { c = txt(c); if (!c) return null; var t = tom(c); return el('span', { class: 'chip ' + t, text: (t === 'alerta' ? '⚠ ' : t === 'ok' ? '✓ ' : '') + classe(c) }); }
   // Limite com unidade, igual ao app ("53 kg", "10%", "1.551 kcal").
   function fmtLimite(v, un) { return fmtValor(v, un) + (un === '%' ? '%' : un ? ' ' + un : ''); }
 
@@ -240,7 +242,10 @@ details.ajuda li{margin:6px 0}
 
   function dataDe(av) {
     var d = av.dados || {};
-    if (d.data_avaliacao) return { dia: d.data_avaliacao.trim(), hora: d.hora_avaliacao ? d.hora_avaliacao.trim().slice(0, 5) : '' };
+    if (txt(d.data_avaliacao)) {
+      var hm = txt(d.hora_avaliacao) ? txt(d.hora_avaliacao).match(/^\d{1,2}:\d{2}/) : null; // "9:05:33" → "9:05"
+      return { dia: txt(d.data_avaliacao), hora: hm ? hm[0] : '' };
+    }
     var t = new Date(av.data);
     if (isNaN(t)) return { dia: '', hora: '' };
     return {
@@ -327,13 +332,36 @@ details.ajuda li{margin:6px 0}
 
   // Rótulos e o número do valor ficam centralizados no ponto exato, sem sair da barra
   // (só o texto desliza perto da borda; agulha e marcas nunca saem do lugar).
+  // Mesma regra do app: mín. e máx. centrados nas marcas, dentro da barra e sem se sobrepor.
+  function separarRotulos(xa, wa, xb, wb, W, folga) {
+    var dentro = function (l, w) { return Math.max(0, Math.min(W - w, l)); };
+    var a = dentro(xa - wa / 2, wa), b = dentro(xb - wb / 2, wb);
+    if (a + wa + folga > b) {
+      var meio = (xa + xb) / 2;
+      a = dentro(meio - folga / 2 - wa, wa);
+      b = dentro(meio + folga / 2, wb);
+      if (a + wa + folga > b) { if (a === 0) b = dentro(wa + folga, wb); else a = dentro(b - folga - wa, wa); }
+    }
+    return [a, b];
+  }
+
   function posicionarRotulos() {
-    var itens = app.querySelectorAll('.regua [data-x]');
-    for (var i = 0; i < itens.length; i++) {
-      var e = itens[i], W = e.parentNode.clientWidth, lw = e.offsetWidth;
-      var x = W * Number(e.getAttribute('data-x')) / 100;
-      e.style.left = Math.max(0, Math.min(W - lw, x - lw / 2)) + 'px';
-      e.style.visibility = 'visible';
+    var reguas = app.querySelectorAll('.regua');
+    for (var i = 0; i < reguas.length; i++) {
+      var r = reguas[i], W = r.clientWidth;
+      var pos = function (e) { return W * Number(e.getAttribute('data-x')) / 100; };
+      var bolha = r.querySelector('.bolha-valor');
+      if (bolha) {
+        var bw = bolha.offsetWidth;
+        bolha.style.left = Math.max(0, Math.min(W - bw, pos(bolha) - bw / 2)) + 'px';
+        bolha.style.visibility = 'visible';
+      }
+      var rots = r.querySelectorAll('.rot');
+      if (rots.length === 2) {
+        var lr = separarRotulos(pos(rots[0]), rots[0].offsetWidth, pos(rots[1]), rots[1].offsetWidth, W, 6);
+        rots[0].style.left = lr[0] + 'px'; rots[1].style.left = lr[1] + 'px';
+        rots[0].style.visibility = 'visible'; rots[1].style.visibility = 'visible';
+      }
     }
   }
   window.addEventListener('resize', posicionarRotulos);
@@ -554,7 +582,8 @@ details.ajuda li{margin:6px 0}
           return;
         }
         var f = lerCampos(doc.fields || {});
-        var lista = (Array.isArray(f.avaliacoes) ? f.avaliacoes : []).filter(function (a) { return a && typeof a === 'object'; });
+        var lista = (Array.isArray(f.avaliacoes) ? f.avaliacoes : []).filter(function (a) { return a && typeof a === 'object'; })
+          .map(function (a) { return { data: typeof a.data === 'string' ? a.data : '', relatorio: typeof a.relatorio === 'string' ? a.relatorio : '', dados: a.dados && typeof a.dados === 'object' && !Array.isArray(a.dados) ? a.dados : {} }; });
         lista.sort(function (x, y) { return (Date.parse(y.data) || 0) - (Date.parse(x.data) || 0); });
         if (!lista.length) {
           estado('📋', 'Nenhuma avaliação por aqui ainda', ['Assim que você fizer uma avaliação na Everest, ela aparece nesta página.'], { texto: 'Atualizar', acao: carregar });
