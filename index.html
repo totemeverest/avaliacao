@@ -452,9 +452,9 @@ details.ajuda li{margin:6px 0}
     b.innerHTML = html;
     b.appendChild(el('span', { class: 'hora', text: dataDe(av).hora || '' }));
     return el('div', { class: 'zap' }, [
-      el('div', { class: 'zap-topo' }, [el('img', { src: 'logo.png', alt: '' }), el('div', {}, [el('b', { text: 'Everest' }), el('span', { text: 'mensagem da sua avaliação' })])]),
+      el('div', { class: 'zap-topo' }, [el('img', { src: 'logo.png', alt: '' }), el('div', {}, [el('b', { text: 'Everest' }), el('span', { text: 'texto completo da sua avaliação' })])]),
       b,
-      el('p', { class: 'zap-nota', text: 'É a mesma mensagem que você recebeu no WhatsApp. Na aba “Fácil de ler” estão os mesmos dados, em cartões explicados.' })
+      el('p', { class: 'zap-nota', text: 'Sua avaliação completa em texto. Na aba “Fácil de ler” estão os mesmos dados, em cartões explicados.' })
     ]);
   }
 
@@ -501,7 +501,7 @@ details.ajuda li{margin:6px 0}
     if (temDados) {
       var abas = el('div', { class: 'abas', role: 'tablist' }, [
         el('button', { role: 'tab', 'aria-selected': String(aba === 'facil'), text: '✨ Fácil de ler', onclick: function () { aba = 'facil'; desenhar(); } }),
-        el('button', { role: 'tab', 'aria-selected': String(aba === 'zap'), text: '💬 WhatsApp', onclick: function () { aba = 'zap'; desenhar(); } })
+        el('button', { role: 'tab', 'aria-selected': String(aba === 'zap'), text: '📄 Texto completo', onclick: function () { aba = 'zap'; desenhar(); } })
       ]);
       hero.appendChild(abas);
     }
